@@ -59,6 +59,12 @@ html,body{margin:0;height:100%;overflow:hidden;background:var(--encre);
 #fatal.on{display:flex}
 #fatal h2{font-family:var(--display);text-transform:uppercase;font-size:32px;margin:0 0 12px}
 #fatal p{font-family:var(--mono);font-size:12px;line-height:1.8;color:#C9C6BF;margin:0}
+/* La scène doit vivre dans un conteneur dimensionné, sinon le flux caméra n'a pas de hauteur. */
+.ar-container{position:absolute;top:0;left:0;width:100%;height:100%;overflow:hidden;z-index:1}
+.ar-container a-scene, .ar-container canvas{width:100%!important;height:100%!important}
+.ar-container video{position:absolute!important;top:0;left:0;
+  width:100%!important;height:100%!important;object-fit:cover}
+.a-enter-vr,.a-enter-ar,.a-orientation-modal{display:none!important}
 </style>
 </head>
 <body>
@@ -88,6 +94,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:var(--encre);
   <p id="fatalmsg"></p>
 </div>
 
+<div class="ar-container">
 <a-scene
   mindar-image="imageTargetSrc: ./targets-indigo.mind?v=3; autoStart: false; uiScanning: no; uiLoading: no; uiError: no; filterMinCF: 0.0001; filterBeta: 0.005; missTolerance: 8; warmupTolerance: 3"
   embedded
@@ -110,6 +117,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:var(--encre);
     <a-video id="screen" src="#clip" width="1" height="2.168" position="0 0 0"></a-video>
   </a-entity>
 </a-scene>
+</div>
 
 <script>
 (function(){

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Test caméra</title>
+<style>
+:root{--encre:#10151F;--papier:#F6F4EF;--rouge:#E4472B;--marigold:#F5B700;--vert:#2FBF71}
+*{box-sizing:border-box}
+body{margin:0;background:var(--encre);color:var(--papier);
+  font-family:'Space Mono',ui-monospace,monospace;padding:16px}
+h1{font-size:15px;letter-spacing:.14em;text-transform:uppercase;margin:0 0 14px;color:var(--marigold)}
+button{font:inherit;font-size:14px;letter-spacing:.08em;text-transform:uppercase;
+  background:var(--rouge);color:var(--papier);border:3px solid var(--papier);
+  padding:14px 20px;width:100%;cursor:pointer}
+#log{font-size:11px;line-height:1.9;margin:14px 0;white-space:pre-wrap;word-break:break-word}
+.ok{color:var(--vert)} .ko{color:var(--rouge)} .na{color:#8F8C86}
+video{width:100%;background:#000;border:3px solid var(--papier);margin-top:12px;display:block}
+</style>
+</head>
+<body>
+<h1>Test caméra · 4 vérifications</h1>
+<button id="go">Lancer le test</button>
+<div id="log"></div>
+<video id="v" playsinline autoplay muted></video>
+
+<script>
+var log = document.getElementById('log');
+function line(state, txt){
+  var cls = state === true ? 'ok' : state === false ? 'ko' : 'na';
+  var mark = state === true ? 'OK  ' : state === false ? 'KO  ' : '··  ';
+  log.innerHTML += '<span class="' + cls + '">' + mark + txt + '</span>\n';
+}
+
+line(window.isSecureContext, '1. HTTPS · ' + location.protocol);
+line(!!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia), '2. API caméra disponible');
+
+document.getElementById('go').addEventListener('click', function(){
+  log.innerHTML = '';
+  line(window.isSecureContext, '1. HTTPS · ' + location.protocol);
+  line(!!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia), '2. API caméra disponible');
+
+  navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
+    .then(function(stream){
+      var t = stream.getVideoTracks()[0];
+      var s = t.getSettings ? t.getSettings() : {};
+      line(true, '3. Flux caméra · ' + (s.width || '?') + 'x' + (s.height || '?') + ' · ' + t.label);
+      document.getElementById('v').srcObject = stream;
+    })
+    .catch(function(e){
+      line(false, '3. Flux caméra refusé · ' + e.name + ' · ' + e.message);
+      if (e.name === 'NotAllowedError') {
+        line(null, '   -> Autorisation bloquée. Icône cadenas dans la barre');
+        line(null, '      d\'adresse, Autorisations, Caméra, Autoriser.');
+      }
+      if (e.name === 'NotReadableError') {
+        line(null, '   -> Caméra occupée par une autre application.');
+        line(null, '      Fermez WhatsApp, l\'appareil photo, Teams.');
+      }
+    });
+
+  fetch('./targets-indigo.mind?v=3', { cache: 'reload' })
+    .then(function(r){ return r.ok ? r.arrayBuffer() : Promise.reject('HTTP ' + r.status); })
+    .then(function(b){
+      line(b.byteLength === 889810, '4. Cible · ' + b.byteLength + ' o'
+        + (b.byteLength === 889810 ? ' · indigo' : ' · fichier inattendu'));
+    })
+    .catch(function(e){ line(false, '4. Cible introuvable · ' + e); });
+});
+</script>
+</body>
+</html>
