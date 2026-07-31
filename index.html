@@ -64,11 +64,11 @@ html,body{margin:0;height:100%;overflow:hidden;background:var(--encre);
 
 <div id="gate">
   <div class="kicker">Novaterra · Réalité augmentée navigateur</div>
-  <h1>Pointez.<br>Ça <em>bouge</em>.</h1>
-  <p>Aucune application à installer. La caméra reconnaît la photo imprimée et joue la vidéo dessus.</p>
+  <h1>Beau Plan<br><em>Indigo</em></h1>
+  <p>Aucune application à installer. La caméra reconnaît la maquette imprimée et joue la vidéo dessus.</p>
   <ol>
     <li>Autorisez la caméra</li>
-    <li>Cadrez la photo en entier</li>
+    <li>Cadrez la maquette en entier</li>
     <li>Gardez le téléphone stable</li>
   </ol>
   <button id="start">Démarrer</button>
@@ -101,18 +101,18 @@ html,body{margin:0;height:100%;overflow:hidden;background:var(--encre);
 
   <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
-  <!-- ratio de la cible : 1079 x 810 -> hauteur = 0.7507 pour une largeur de 1 -->
+  <!-- ratio de la cible : 738 x 1600 -> hauteur = 2.168 pour une largeur de 1 -->
   <a-entity id="target" mindar-image-target="targetIndex: 0">
-    <a-plane id="border" color="#E4472B" width="1.045" height="0.7957"
+    <a-plane id="border" color="#E4472B" width="1.045" height="2.213"
              position="0 0 -0.002" material="shader: flat"></a-plane>
-    <a-video id="screen" src="#clip" width="1" height="0.7507" position="0 0 0"></a-video>
+    <a-video id="screen" src="#clip" width="1" height="2.168" position="0 0 0"></a-video>
   </a-entity>
 </a-scene>
 
 <script>
 (function(){
   // >>> remplacez par votre lien si besoin
-  var YT = "https://youtu.be/vam_9GYy1jw";
+  var YT = "https://youtu.be/Pc2-ln6rSJs";
 
   var scene   = document.querySelector('a-scene');
   var target  = document.querySelector('#target');
@@ -145,7 +145,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:var(--encre);
     hasVideo = false;
     screenEl.setAttribute('visible', 'false');
     border.setAttribute('width', '1');
-    border.setAttribute('height', '0.7507');
+    border.setAttribute('height', '2.168');
   });
 
   // --- pas de HTTPS, pas de caméra. Autant le dire tout de suite.
@@ -154,7 +154,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:var(--encre);
   }
 
   scene.addEventListener('arReady', function(){
-    say('Cadrez la photo');
+    say('Cadrez la maquette');
   });
   scene.addEventListener('arError', function(){
     die("Impossible de démarrer la caméra. Vérifiez l'autorisation dans les réglages du navigateur, puis rechargez.");
@@ -180,7 +180,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:var(--encre);
 
   target.addEventListener('targetLost', function(){
     visible = false;
-    say('Cadrez la photo');
+    say('Cadrez la maquette');
     linkBtn.classList.remove('on');
     if (hasVideo) video.pause();
   });
