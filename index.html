@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>Beau Plan · Indigo — WebAR</title>
+<title>Beau Plan · Indigo — WebAR 3D</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Mono:wght@400;700&family=Spline+Sans:wght@400;600&display=swap" rel="stylesheet">
@@ -29,7 +29,6 @@ button{font:inherit}
   width:100%!important;height:100%!important;object-fit:cover}
 .a-enter-vr,.a-enter-ar,.a-orientation-modal{display:none!important}
 
-/* ---------- porte d'entrée ---------- */
 #gate{position:fixed;inset:0;z-index:30;background:var(--encre);
   display:flex;flex-direction:column;justify-content:center;
   padding:max(26px,env(safe-area-inset-top)) 26px max(26px,env(safe-area-inset-bottom))}
@@ -46,14 +45,12 @@ button{font:inherit}
 #gate .foot{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;
   color:#5E5B56;margin-top:auto;padding-top:22px}
 
-/* ---------- HUD ---------- */
 #hud{position:fixed;z-index:20;left:0;right:0;bottom:0;
   padding:0 12px max(14px,env(safe-area-inset-bottom));
   display:none;flex-direction:column;align-items:center;gap:8px;pointer-events:none}
 #hud.on{display:flex}
 #turn{display:none;pointer-events:none;font-family:var(--mono);font-size:11px;letter-spacing:.06em;
-  background:var(--marigold);color:var(--encre);padding:9px 14px;text-align:center;
-  border:2px solid var(--encre)}
+  background:var(--marigold);color:var(--encre);padding:9px 14px;text-align:center;border:2px solid var(--encre)}
 #turn.on{display:block}
 #turn b{font-weight:700}
 .row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
@@ -62,14 +59,12 @@ button{font:inherit}
 .act.on{display:block}
 #infoBtn{background:var(--papier);color:var(--encre)}
 #videoBtn{background:var(--rouge);color:var(--papier);border-color:var(--papier)}
-#soundBtn{background:var(--marigold);color:var(--encre)}
 #status{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
   background:var(--encre);color:var(--papier);border:2px solid var(--papier);padding:9px 14px;text-align:center}
 #status.found{background:var(--rouge);border-color:var(--rouge)}
 #diag{font-family:var(--mono);font-size:9px;letter-spacing:.1em;color:var(--marigold);
   background:var(--encre);padding:4px 8px;text-align:center}
 
-/* ---------- fiche ---------- */
 #sheet{position:fixed;inset:0;z-index:50;background:var(--encre);
   display:none;flex-direction:column;overscroll-behavior:contain}
 #sheet.on{display:flex}
@@ -82,12 +77,12 @@ button{font:inherit}
   font-family:var(--mono);font-size:12px;letter-spacing:.1em;padding:10px 12px;cursor:pointer}
 #sheetBody{flex:1 1 auto;overflow-y:auto;-webkit-overflow-scrolling:touch;
   padding:22px 22px max(30px,env(safe-area-inset-bottom))}
-#sheetBody .lede{font-size:17px;line-height:1.5;margin:0 0 26px;color:var(--papier)}
+#sheetBody .lede{font-size:17px;line-height:1.5;margin:0 0 26px}
 .facts{display:grid;grid-template-columns:1fr;gap:1px;background:#262B33;margin:0 0 26px}
 .fact{background:var(--encre);padding:14px 0}
 .fact dt{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--gris)}
 .fact dd{margin:6px 0 0;font-size:16px;line-height:1.35}
-.fact dd .big{font-family:var(--display);font-size:34px;line-height:1;letter-spacing:.01em}
+.fact dd .big{font-family:var(--display);font-size:34px;line-height:1}
 h3{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
   color:var(--rouge);margin:0 0 12px;padding-top:6px;border-top:2px solid #262B33}
 #sheetBody ul{margin:0 0 26px;padding-left:18px}
@@ -115,11 +110,11 @@ h3{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:up
 <div id="gate">
   <div class="kicker">Novaterra · Réalité augmentée navigateur</div>
   <h1>Beau Plan<br><em>Indigo</em></h1>
-  <p>Aucune application à installer. La caméra reconnaît la maquette et pose l'information dessus.</p>
+  <p>Aucune application à installer. La caméra reconnaît le plan et les bâtiments sortent du sol.</p>
   <ol>
     <li>Autorisez la caméra</li>
-    <li>Cadrez la maquette en entier, téléphone vertical</li>
-    <li>Gardez le téléphone stable</li>
+    <li>Cadrez le plan en entier, téléphone vertical</li>
+    <li>Inclinez légèrement autour du plan pour voir les volumes</li>
   </ol>
   <button id="start">Démarrer</button>
   <div class="foot">WebAR · aucun téléchargement</div>
@@ -130,13 +125,11 @@ h3{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:up
   <div class="row">
     <button id="infoBtn"  class="act">Infos</button>
     <button id="videoBtn" class="act">Vidéo</button>
-    <button id="soundBtn" class="act">Son</button>
   </div>
   <div id="status">Chargement</div>
   <div id="diag"></div>
 </div>
 
-<!-- ---------- fiche projet, données de beauplan.mu ---------- -->
 <div id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle" tabindex="-1">
   <div id="sheetHead">
     <div>
@@ -147,7 +140,6 @@ h3{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:up
   </div>
   <div id="sheetBody">
     <p class="lede">Après la commercialisation complète de la première phase, Novaterra lance une nouvelle tranche de 57 appartements au cœur de Beau Plan.</p>
-
     <dl class="facts">
       <div class="fact"><dt>Appartements</dt><dd><span class="big">57</span></dd></div>
       <div class="fact"><dt>Typologies</dt><dd>Trois configurations</dd></div>
@@ -156,7 +148,6 @@ h3{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:up
       <div class="fact"><dt>Localisation</dt><dd>Beau Plan Smart City, 21001 Pamplemousses</dd></div>
       <div class="fact"><dt>Aménagement</dt><dd>Pack déco optionnel</dd></div>
     </dl>
-
     <h3>Arguments d'investissement</h3>
     <ul>
       <li>Commerces et services de la ville accessibles à pied</li>
@@ -164,21 +155,13 @@ h3{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:up
       <li>Potentiel locatif</li>
       <li>Appréciation du capital et de la valeur foncière</li>
     </ul>
-
-    <h3>Chantier</h3>
-    <ul>
-      <li>Suivi photographique publié de mai à novembre 2024</li>
-    </ul>
-
     <div class="contact">
       <div class="kicker">Contact projet</div>
       <div class="who">Fabrice Noel</div>
       <a href="tel:+23054848673">+230 54 84 86 73</a>
       <a href="mailto:fnoel@novaterra.mu">fnoel@novaterra.mu</a>
     </div>
-
-    <p class="note">Aucun prix n'est publié pour la phase 2. La phase 1, aujourd'hui vendue, démarrait à Rs 6 700 000. Ce montant ne vaut pas pour cette tranche.</p>
-
+    <p class="note">Aucun prix n'est publié pour la phase 2. La phase 1, aujourd'hui vendue, démarrait à Rs 6 700 000. Ce montant ne vaut pas pour cette tranche. Les volumes 3D sont relevés sur la maquette : implantation indicative, sans valeur contractuelle.</p>
     <p class="src">Source · <a href="https://beauplan.mu/projects/indigo-phase-2/" target="_blank" rel="noopener">beauplan.mu</a></p>
   </div>
 </div>
@@ -190,25 +173,23 @@ h3{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:up
 
 <div class="ar-container">
 <a-scene
-  mindar-image="imageTargetSrc: ./targets-indigo.mind?v=5; autoStart: false; uiScanning: no; uiLoading: no; uiError: no; filterMinCF: 0.0001; filterBeta: 0.005; missTolerance: 8; warmupTolerance: 3"
+  mindar-image="imageTargetSrc: ./targets-nadir.mind?v=6; autoStart: false; uiScanning: no; uiLoading: no; uiError: no; filterMinCF: 0.0001; filterBeta: 0.005; missTolerance: 8; warmupTolerance: 3"
   embedded
   color-space="sRGB"
   renderer="colorManagement: true, physicallyCorrectLights"
   vr-mode-ui="enabled: false"
   device-orientation-permission-ui="enabled: false">
 
-  <a-assets>
-    <video id="clip" src="./video.mp4" preload="auto" loop muted playsinline webkit-playsinline></video>
-  </a-assets>
-
   <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
-  <!-- cible : 738 x 1600 -> largeur 1, hauteur 2.168 -->
+  <a-entity light="type: hemisphere; color: #ffffff; groundColor: #8f8c86; intensity: 0.95"></a-entity>
+  <a-entity light="type: directional; color: #ffffff; intensity: 0.55" position="0.6 1 1.2"></a-entity>
+
+  <!-- cible nadir : 900 x 1600 -> largeur 1, hauteur 1.7778 -->
   <a-entity id="target" mindar-image-target="targetIndex: 0">
-    <a-entity id="marks"></a-entity>
-    <a-plane id="cartel" width="0.88" height="0.44" position="0 0.70 0.001"
+    <a-entity id="ville"></a-entity>
+    <a-plane id="cartel" width="0.80" height="0.34" position="0 0.72 0.004"
              material="transparent: true; shader: flat" visible="false"></a-plane>
-    <a-video id="screen" src="#clip" width="1" height="2.168" position="0 0 0.002" visible="false"></a-video>
   </a-entity>
 </a-scene>
 </div>
@@ -216,10 +197,19 @@ h3{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:up
 <script>
 (function(){
   var YT   = "https://youtu.be/Pc2-ln6rSJs";
-  var MIND = "./targets-indigo.mind?v=5";
-  var MIND_SIZE = 889810;
+  var MIND = "./targets-nadir.mind?v=6";
+  var MIND_SIZE = 861094;
 
-  // Cartel AR : court et gros. Le détail vit dans la fiche, pas sur un plan qui bouge.
+  // Emprises relevées sur la photo nadir de la maquette (pixels, image 900x1600).
+  // Coins consolidés depuis 4 passes de segmentation. Indicatif, pas contractuel.
+  var IMG_W = 900, IMG_H = 1600;
+  var FOOTPRINTS = [
+    [[213,332],[650,355],[630,498],[390,510],[382,688],[232,678]],
+    [[510,725],[697,736],[660,1082],[575,1140],[349,1116],[344,951],[490,942]]
+  ];
+  // R+3 + toiture : hauteur ~ 0.9 x épaisseur d'aile (129-139 px) -> 120 px -> 0.133 unité
+  var HAUTEUR = 0.133;
+
   var CARTEL = {
     kicker: "BEAU PLAN · PAMPLEMOUSSES",
     titre:  "INDIGO",
@@ -228,88 +218,111 @@ h3{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:up
     unite:  "APPARTEMENTS"
   };
 
-  var W = 1, H = 2.168;
-  var ARM = 0.17, THICK = 0.016;
-
   var $ = function(s){ return document.querySelector(s); };
-  var scene = $('a-scene'), target = $('#target'), marks = $('#marks');
-  var cartel = $('#cartel'), screenEl = $('#screen'), video = $('#clip');
+  var scene = $('a-scene'), target = $('#target'), ville = $('#ville'), cartel = $('#cartel');
   var gate = $('#gate'), hud = $('#hud'), status = $('#status'), diag = $('#diag');
-  var turn = $('#turn'), infoBtn = $('#infoBtn'), videoBtn = $('#videoBtn'), soundBtn = $('#soundBtn');
+  var turn = $('#turn'), infoBtn = $('#infoBtn'), videoBtn = $('#videoBtn');
   var sheet = $('#sheet'), closeBtn = $('#close');
   var fatal = $('#fatal'), fatalMsg = $('#fatalmsg');
 
-  var hasVideo = true, locked = false, lastFocus = null;
+  var locked = false, lastFocus = null, raf = null;
   var calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var portrait = window.matchMedia('(orientation: portrait)');
 
   function say(t, found){ status.textContent = t; status.classList.toggle('found', !!found); }
   function die(m){ fatalMsg.textContent = m; fatal.classList.add('on'); }
 
-  /* ---------- équerres aux quatre coins ---------- */
-  (function buildMarks(){
-    var hx = W / 2, hy = H / 2;
-    [[-1,1],[1,1],[-1,-1],[1,-1]].forEach(function(c){
-      var sx = c[0], sy = c[1];
-      var a = document.createElement('a-plane');
-      a.setAttribute('width', ARM); a.setAttribute('height', THICK);
-      a.setAttribute('color', '#E4472B'); a.setAttribute('material', 'shader: flat');
-      a.setAttribute('position', (sx * (hx - ARM / 2)) + ' ' + (sy * hy) + ' 0.003');
-      marks.appendChild(a);
-      var b = document.createElement('a-plane');
-      b.setAttribute('width', THICK); b.setAttribute('height', ARM);
-      b.setAttribute('color', '#E4472B'); b.setAttribute('material', 'shader: flat');
-      b.setAttribute('position', (sx * hx) + ' ' + (sy * (hy - ARM / 2)) + ' 0.003');
-      marks.appendChild(b);
-    });
-  })();
+  /* ---------- pixels image -> unités cible (origine au centre, y vers le haut) ---------- */
+  function toUnit(p){
+    return [ p[0] / IMG_W - 0.5, (IMG_H / 2 - p[1]) / IMG_W ];
+  }
 
-  /* ---------- cartel dessiné au canvas, vraies polices ---------- */
+  /* ---------- composant : emprise extrudée, toit gris, murs blancs, arêtes encre ---------- */
+  AFRAME.registerComponent('batiment', {
+    schema: { index: { type: 'int' }, hauteur: { default: 0.133 } },
+    init: function(){
+      var pts = FOOTPRINTS[this.data.index].map(toUnit);
+      var shape = new THREE.Shape();
+      pts.forEach(function(q, i){ i === 0 ? shape.moveTo(q[0], q[1]) : shape.lineTo(q[0], q[1]); });
+      var geo = new THREE.ExtrudeGeometry(shape, { depth: this.data.hauteur, bevelEnabled: false });
+      var mats = [
+        new THREE.MeshLambertMaterial({ color: 0x777C82 }),  // dessus et dessous : toit
+        new THREE.MeshLambertMaterial({ color: 0xF2EFE8 })   // flancs : murs
+      ];
+      var mesh = new THREE.Mesh(geo, mats);
+      var edges = new THREE.LineSegments(
+        new THREE.EdgesGeometry(geo, 25),
+        new THREE.LineBasicMaterial({ color: 0x10151F })
+      );
+      var g = new THREE.Group();
+      g.add(mesh); g.add(edges);
+      this.el.setObject3D('mesh', g);
+    }
+  });
+
+  [0, 1].forEach(function(i){
+    var e = document.createElement('a-entity');
+    e.setAttribute('batiment', 'index: ' + i + '; hauteur: ' + HAUTEUR);
+    ville.appendChild(e);
+  });
+  ville.object3D.scale.z = 0.001;
+  ville.object3D.visible = false;
+
+  /* ---------- sortie de sol : tween RAF, easeOutCubic ---------- */
+  function lever(){
+    ville.object3D.visible = true;
+    if (calm) { ville.object3D.scale.z = 1; return; }
+    if (raf) cancelAnimationFrame(raf);
+    var t0 = null, DUR = 750;
+    function step(ts){
+      if (!t0) t0 = ts;
+      var k = Math.min((ts - t0) / DUR, 1);
+      var e = 1 - Math.pow(1 - k, 3);
+      ville.object3D.scale.z = 0.001 + e * 0.999;
+      if (k < 1) raf = requestAnimationFrame(step);
+    }
+    raf = requestAnimationFrame(step);
+  }
+  function coucher(){
+    if (raf) cancelAnimationFrame(raf);
+    ville.object3D.scale.z = 0.001;
+    ville.object3D.visible = false;
+  }
+
+  /* ---------- cartel canvas, vraies polices ---------- */
   function drawCartel(){
-    var s = 4, w = 440 * s, h = 220 * s;
+    var s = 4, w = 440 * s, h = 187 * s;   // 0.80 x 0.34
     var cv = document.createElement('canvas');
     cv.width = w; cv.height = h;
     var x = cv.getContext('2d');
-
     x.fillStyle = '#10151F'; x.fillRect(0, 0, w, h);
-    x.fillStyle = '#E4472B'; x.fillRect(0, 0, w, 7 * s);
+    x.fillStyle = '#E4472B'; x.fillRect(0, 0, w, 6 * s);
     x.fillStyle = '#F5B700'; x.fillRect(0, h - 4 * s, w, 4 * s);
-
     x.fillStyle = '#E4472B';
-    x.font = (13 * s) + "px 'Space Mono', monospace";
-    x.fillText(CARTEL.kicker.split('').join('\u2009'), 22 * s, 40 * s);
-
+    x.font = (12 * s) + "px 'Space Mono', monospace";
+    x.fillText(CARTEL.kicker.split('').join('\u2009'), 20 * s, 34 * s);
     x.fillStyle = '#F6F4EF';
-    x.font = (62 * s) + "px Anton, sans-serif";
-    x.fillText(CARTEL.titre, 20 * s, 104 * s);
-
+    x.font = (54 * s) + "px Anton, sans-serif";
+    x.fillText(CARTEL.titre, 18 * s, 90 * s);
     x.fillStyle = '#E4472B';
-    x.font = 'bold ' + (15 * s) + "px 'Space Mono', monospace";
-    x.fillText(CARTEL.phase, 22 * s, 132 * s);
-
+    x.font = 'bold ' + (13 * s) + "px 'Space Mono', monospace";
+    x.fillText(CARTEL.phase, 20 * s, 114 * s);
     x.strokeStyle = 'rgba(246,244,239,.22)'; x.lineWidth = 2 * s;
-    x.beginPath(); x.moveTo(22 * s, 152 * s); x.lineTo(w - 22 * s, 152 * s); x.stroke();
-
+    x.beginPath(); x.moveTo(20 * s, 130 * s); x.lineTo(w - 20 * s, 130 * s); x.stroke();
     x.fillStyle = '#F6F4EF';
-    x.font = (50 * s) + "px Anton, sans-serif";
-    x.fillText(CARTEL.nombre, 22 * s, 200 * s);
+    x.font = (40 * s) + "px Anton, sans-serif";
+    x.fillText(CARTEL.nombre, 20 * s, 172 * s);
     var nw = x.measureText(CARTEL.nombre).width;
-
     x.fillStyle = '#9C9890';
-    x.font = (14 * s) + "px 'Space Mono', monospace";
-    x.fillText(CARTEL.unite, 22 * s + nw + 14 * s, 194 * s);
-
-    cartel.setAttribute('material', {
-      src: cv.toDataURL('image/png'), transparent: true, shader: 'flat'
-    });
+    x.font = (13 * s) + "px 'Space Mono', monospace";
+    x.fillText(CARTEL.unite, 20 * s + nw + 12 * s, 167 * s);
+    cartel.setAttribute('material', { src: cv.toDataURL('image/png'), transparent: true, shader: 'flat' });
   }
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(drawCartel);
   else window.addEventListener('load', drawCartel);
 
   /* ---------- invite de rotation : après verrouillage seulement ---------- */
   function syncTurn(){
-    // En portrait la cible verticale se cadre mieux. On ne suggère de tourner
-    // qu'une fois la maquette verrouillée, quand la vidéo devient l'objet principal.
     turn.classList.toggle('on', locked && portrait.matches && !sheet.classList.contains('on'));
   }
   if (portrait.addEventListener) portrait.addEventListener('change', syncTurn);
@@ -320,33 +333,23 @@ h3{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:up
   function openSheet(){
     lastFocus = document.activeElement;
     sheet.classList.add('on'); sheet.focus(); syncTurn();
-    if (hasVideo) video.pause();
   }
   function closeSheet(){
     sheet.classList.remove('on'); syncTurn();
     if (lastFocus) lastFocus.focus();
-    if (hasVideo && locked) video.play();
   }
   infoBtn.addEventListener('click', openSheet);
   closeBtn.addEventListener('click', closeSheet);
   document.addEventListener('keydown', function(e){
     if (e.key === 'Escape' && sheet.classList.contains('on')) closeSheet();
   });
-
-  videoBtn.addEventListener('click', function(){
-    window.open(YT, '_blank', 'noopener');
-  });
-  soundBtn.addEventListener('click', function(){
-    video.muted = false; video.play(); soundBtn.classList.remove('on');
-  });
-
-  video.addEventListener('error', function(){ hasVideo = false; });
+  videoBtn.addEventListener('click', function(){ window.open(YT, '_blank', 'noopener'); });
 
   if (!window.isSecureContext) {
     die("Le navigateur n'autorise la caméra qu'en HTTPS. Servez la page depuis GitHub Pages, pas en file:// ni en http://.");
   }
 
-  scene.addEventListener('arReady', function(){ say('Cadrez la maquette'); });
+  scene.addEventListener('arReady', function(){ say('Cadrez le plan'); });
   scene.addEventListener('arError', function(){
     die("Impossible de démarrer la caméra. Ouvrez test.html pour isoler la cause.");
   });
@@ -357,50 +360,31 @@ h3{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:up
     cartel.setAttribute('visible', 'true');
     infoBtn.classList.add('on');
     videoBtn.classList.add('on');
-    if (!calm) {
-      cartel.setAttribute('scale', '0.92 0.92 1');
-      cartel.setAttribute('animation__in', 'property: scale; to: 1 1 1; dur: 220; easing: easeOutCubic');
-    }
-    if (hasVideo && !sheet.classList.contains('on')) {
-      screenEl.setAttribute('visible', 'true');
-      var p = video.play();
-      if (p && p.catch) p.catch(function(){
-        video.muted = true; video.play(); soundBtn.classList.add('on');
-      });
-    }
+    lever();
     syncTurn();
   });
 
   target.addEventListener('targetLost', function(){
     locked = false;
-    say('Cadrez la maquette');
+    say('Cadrez le plan');
     cartel.setAttribute('visible', 'false');
-    screenEl.setAttribute('visible', 'false');
     infoBtn.classList.remove('on');
     videoBtn.classList.remove('on');
-    if (hasVideo) video.pause();
+    coucher();
     syncTurn();
   });
 
   $('#start').addEventListener('click', function(){
-    if (hasVideo) {
-      var p = video.play();
-      if (p && p.then) p.then(function(){
-        video.pause(); video.currentTime = 0; video.muted = false;
-      }).catch(function(){});
-    }
     gate.style.display = 'none';
     hud.classList.add('on');
     say('Démarrage caméra');
-
     fetch(MIND, { cache: 'reload' })
       .then(function(r){ return r.ok ? r.arrayBuffer() : Promise.reject('HTTP ' + r.status); })
       .then(function(b){
         diag.textContent = 'cible ' + b.byteLength + ' o'
-          + (b.byteLength === MIND_SIZE ? ' · indigo ok' : ' · fichier inattendu');
+          + (b.byteLength === MIND_SIZE ? ' · nadir ok' : ' · fichier inattendu');
       })
       .catch(function(e){ diag.textContent = 'cible introuvable · ' + e; });
-
     var sys = scene.systems['mindar-image-system'];
     if (!sys) { die("MindAR ne s'est pas chargé. Vérifiez le réseau puis rechargez."); return; }
     sys.start();
