@@ -59,7 +59,7 @@ document.getElementById('go').addEventListener('click', function(){
       }
     });
 
-  fetch('./targets-indigo.mind?v=3', { cache: 'reload' })
+  fetch('./targets-indigo.mind?v=5', { cache: 'reload' })
     .then(function(r){ return r.ok ? r.arrayBuffer() : Promise.reject('HTTP ' + r.status); })
     .then(function(b){
       line(b.byteLength === 889810, '4. Cible · ' + b.byteLength + ' o'

@@ -12,14 +12,15 @@
 <style>
 :root{
   --beton:#2C3035;--papier:#F6F4EF;--encre:#10151F;
-  --rouge:#E4472B;--marigold:#F5B700;
+  --rouge:#E4472B;--marigold:#F5B700;--gris:#9C9890;
   --display:'Anton',sans-serif;--text:'Spline Sans',sans-serif;--mono:'Space Mono',monospace;
   --stroke:4px;
 }
 *{box-sizing:border-box}
 html,body{margin:0;height:100%;overflow:hidden;background:var(--encre);
-  font-family:var(--text);-webkit-text-size-adjust:100%}
+  font-family:var(--text);color:var(--papier);-webkit-text-size-adjust:100%}
 *:focus-visible{outline:var(--stroke) solid var(--marigold);outline-offset:3px}
+button{font:inherit}
 
 /* la scène doit vivre dans un conteneur dimensionné, sinon le flux caméra n'a pas de hauteur */
 .ar-container{position:absolute;top:0;left:0;width:100%;height:100%;overflow:hidden;z-index:1}
@@ -28,40 +29,85 @@ html,body{margin:0;height:100%;overflow:hidden;background:var(--encre);
   width:100%!important;height:100%!important;object-fit:cover}
 .a-enter-vr,.a-enter-ar,.a-orientation-modal{display:none!important}
 
-#gate{position:fixed;inset:0;z-index:30;background:var(--encre);color:var(--papier);
+/* ---------- porte d'entrée ---------- */
+#gate{position:fixed;inset:0;z-index:30;background:var(--encre);
   display:flex;flex-direction:column;justify-content:center;
-  padding:max(28px,env(safe-area-inset-top)) 28px max(28px,env(safe-area-inset-bottom))}
-#gate .kicker{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--rouge)}
+  padding:max(26px,env(safe-area-inset-top)) 26px max(26px,env(safe-area-inset-bottom))}
+.kicker{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--rouge)}
 #gate h1{font-family:var(--display);font-weight:400;text-transform:uppercase;
-  font-size:clamp(40px,13vw,86px);line-height:.9;margin:14px 0 0}
+  font-size:clamp(38px,12vw,80px);line-height:.9;margin:14px 0 0}
 #gate h1 em{font-style:normal;color:var(--rouge)}
-#gate p{font-size:15px;line-height:1.45;max-width:34ch;margin:20px 0 0;color:#C9C6BF}
-#gate ol{font-family:var(--mono);font-size:12px;line-height:1.9;color:#8F8C86;margin:22px 0 0;padding-left:20px}
-#start{margin-top:30px;align-self:flex-start;font-family:var(--display);text-transform:uppercase;
+#gate p{font-size:15px;line-height:1.45;max-width:34ch;margin:18px 0 0;color:#C9C6BF}
+#gate ol{font-family:var(--mono);font-size:12px;line-height:1.9;color:#8F8C86;margin:20px 0 0;padding-left:20px}
+#start{margin-top:28px;align-self:flex-start;font-family:var(--display);text-transform:uppercase;
   font-size:22px;letter-spacing:.04em;background:var(--rouge);color:var(--papier);
   border:var(--stroke) solid var(--papier);padding:16px 30px;cursor:pointer}
 #start:active{background:var(--papier);color:var(--rouge);border-color:var(--rouge)}
 #gate .foot{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;
-  color:#5E5B56;margin-top:auto;padding-top:24px}
+  color:#5E5B56;margin-top:auto;padding-top:22px}
 
+/* ---------- HUD ---------- */
 #hud{position:fixed;z-index:20;left:0;right:0;bottom:0;
-  padding:0 16px max(16px,env(safe-area-inset-bottom));
+  padding:0 12px max(14px,env(safe-area-inset-bottom));
   display:none;flex-direction:column;align-items:center;gap:8px;pointer-events:none}
 #hud.on{display:flex}
+#turn{display:none;pointer-events:none;font-family:var(--mono);font-size:11px;letter-spacing:.06em;
+  background:var(--marigold);color:var(--encre);padding:9px 14px;text-align:center;
+  border:2px solid var(--encre)}
+#turn.on{display:block}
+#turn b{font-weight:700}
+.row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.act{pointer-events:auto;font-family:var(--mono);font-weight:700;font-size:12px;letter-spacing:.1em;
+  text-transform:uppercase;padding:13px 17px;cursor:pointer;display:none;border:2px solid var(--encre)}
+.act.on{display:block}
+#infoBtn{background:var(--papier);color:var(--encre)}
+#videoBtn{background:var(--rouge);color:var(--papier);border-color:var(--papier)}
+#soundBtn{background:var(--marigold);color:var(--encre)}
 #status{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
   background:var(--encre);color:var(--papier);border:2px solid var(--papier);padding:9px 14px;text-align:center}
 #status.found{background:var(--rouge);border-color:var(--rouge)}
 #diag{font-family:var(--mono);font-size:9px;letter-spacing:.1em;color:var(--marigold);
   background:var(--encre);padding:4px 8px;text-align:center}
-.act{pointer-events:auto;font-family:var(--mono);font-weight:700;font-size:12px;letter-spacing:.1em;
-  text-transform:uppercase;background:var(--marigold);color:var(--encre);border:2px solid var(--encre);
-  padding:12px 18px;cursor:pointer;display:none}
-.act.on{display:block}
-#fatal{position:fixed;inset:0;z-index:40;display:none;background:var(--encre);color:var(--papier);
-  padding:32px;flex-direction:column;justify-content:center}
+
+/* ---------- fiche ---------- */
+#sheet{position:fixed;inset:0;z-index:50;background:var(--encre);
+  display:none;flex-direction:column;overscroll-behavior:contain}
+#sheet.on{display:flex}
+#sheetHead{flex:0 0 auto;border-bottom:var(--stroke) solid var(--rouge);
+  padding:max(18px,env(safe-area-inset-top)) 22px 16px;
+  display:flex;align-items:flex-start;justify-content:space-between;gap:14px}
+#sheetHead h2{font-family:var(--display);text-transform:uppercase;font-weight:400;
+  font-size:clamp(34px,10vw,58px);line-height:.88;margin:8px 0 0}
+#close{flex:0 0 auto;background:transparent;color:var(--papier);border:2px solid var(--papier);
+  font-family:var(--mono);font-size:12px;letter-spacing:.1em;padding:10px 12px;cursor:pointer}
+#sheetBody{flex:1 1 auto;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  padding:22px 22px max(30px,env(safe-area-inset-bottom))}
+#sheetBody .lede{font-size:17px;line-height:1.5;margin:0 0 26px;color:var(--papier)}
+.facts{display:grid;grid-template-columns:1fr;gap:1px;background:#262B33;margin:0 0 26px}
+.fact{background:var(--encre);padding:14px 0}
+.fact dt{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--gris)}
+.fact dd{margin:6px 0 0;font-size:16px;line-height:1.35}
+.fact dd .big{font-family:var(--display);font-size:34px;line-height:1;letter-spacing:.01em}
+h3{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--rouge);margin:0 0 12px;padding-top:6px;border-top:2px solid #262B33}
+#sheetBody ul{margin:0 0 26px;padding-left:18px}
+#sheetBody li{font-size:15px;line-height:1.55;margin-bottom:7px}
+.contact{border:2px solid #262B33;padding:16px;margin:0 0 22px}
+.contact .who{font-family:var(--display);font-size:22px;text-transform:uppercase;margin-bottom:4px}
+.contact a{color:var(--marigold);text-decoration:none;font-family:var(--mono);font-size:14px;
+  display:block;margin-top:7px}
+.note{font-family:var(--mono);font-size:11px;line-height:1.7;color:var(--gris);
+  border-left:3px solid var(--marigold);padding-left:12px;margin:0 0 24px}
+.src{font-family:var(--mono);font-size:11px;letter-spacing:.06em}
+.src a{color:var(--papier)}
+
+#fatal{position:fixed;inset:0;z-index:60;display:none;background:var(--encre);
+  padding:30px;flex-direction:column;justify-content:center}
 #fatal.on{display:flex}
 #fatal h2{font-family:var(--display);text-transform:uppercase;font-size:32px;margin:0 0 12px}
 #fatal p{font-family:var(--mono);font-size:12px;line-height:1.8;color:#C9C6BF;margin:0}
+
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
@@ -69,10 +115,10 @@ html,body{margin:0;height:100%;overflow:hidden;background:var(--encre);
 <div id="gate">
   <div class="kicker">Novaterra · Réalité augmentée navigateur</div>
   <h1>Beau Plan<br><em>Indigo</em></h1>
-  <p>Aucune application à installer. La caméra reconnaît la maquette imprimée et pose l'information dessus.</p>
+  <p>Aucune application à installer. La caméra reconnaît la maquette et pose l'information dessus.</p>
   <ol>
     <li>Autorisez la caméra</li>
-    <li>Cadrez la maquette en entier</li>
+    <li>Cadrez la maquette en entier, téléphone vertical</li>
     <li>Gardez le téléphone stable</li>
   </ol>
   <button id="start">Démarrer</button>
@@ -80,10 +126,61 @@ html,body{margin:0;height:100%;overflow:hidden;background:var(--encre);
 </div>
 
 <div id="hud">
-  <button id="sound" class="act">Activer le son</button>
-  <button id="link" class="act">Ouvrir la vidéo</button>
+  <div id="turn"><b>Tournez le téléphone</b> pour un meilleur rendu</div>
+  <div class="row">
+    <button id="infoBtn"  class="act">Infos</button>
+    <button id="videoBtn" class="act">Vidéo</button>
+    <button id="soundBtn" class="act">Son</button>
+  </div>
   <div id="status">Chargement</div>
   <div id="diag"></div>
+</div>
+
+<!-- ---------- fiche projet, données de beauplan.mu ---------- -->
+<div id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle" tabindex="-1">
+  <div id="sheetHead">
+    <div>
+      <div class="kicker">Beau Plan · Pamplemousses</div>
+      <h2 id="sheetTitle">Indigo<br>Phase 2</h2>
+    </div>
+    <button id="close" aria-label="Fermer la fiche">Fermer</button>
+  </div>
+  <div id="sheetBody">
+    <p class="lede">Après la commercialisation complète de la première phase, Novaterra lance une nouvelle tranche de 57 appartements au cœur de Beau Plan.</p>
+
+    <dl class="facts">
+      <div class="fact"><dt>Appartements</dt><dd><span class="big">57</span></dd></div>
+      <div class="fact"><dt>Typologies</dt><dd>Trois configurations</dd></div>
+      <div class="fact"><dt>Phase 1</dt><dd>Intégralement vendue</dd></div>
+      <div class="fact"><dt>Régime</dt><dd>Smart City Scheme</dd></div>
+      <div class="fact"><dt>Localisation</dt><dd>Beau Plan Smart City, 21001 Pamplemousses</dd></div>
+      <div class="fact"><dt>Aménagement</dt><dd>Pack déco optionnel</dd></div>
+    </dl>
+
+    <h3>Arguments d'investissement</h3>
+    <ul>
+      <li>Commerces et services de la ville accessibles à pied</li>
+      <li>Éligibilité au Smart City Scheme</li>
+      <li>Potentiel locatif</li>
+      <li>Appréciation du capital et de la valeur foncière</li>
+    </ul>
+
+    <h3>Chantier</h3>
+    <ul>
+      <li>Suivi photographique publié de mai à novembre 2024</li>
+    </ul>
+
+    <div class="contact">
+      <div class="kicker">Contact projet</div>
+      <div class="who">Fabrice Noel</div>
+      <a href="tel:+23054848673">+230 54 84 86 73</a>
+      <a href="mailto:fnoel@novaterra.mu">fnoel@novaterra.mu</a>
+    </div>
+
+    <p class="note">Aucun prix n'est publié pour la phase 2. La phase 1, aujourd'hui vendue, démarrait à Rs 6 700 000. Ce montant ne vaut pas pour cette tranche.</p>
+
+    <p class="src">Source · <a href="https://beauplan.mu/projects/indigo-phase-2/" target="_blank" rel="noopener">beauplan.mu</a></p>
+  </div>
 </div>
 
 <div id="fatal">
@@ -93,7 +190,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:var(--encre);
 
 <div class="ar-container">
 <a-scene
-  mindar-image="imageTargetSrc: ./targets-indigo.mind?v=4; autoStart: false; uiScanning: no; uiLoading: no; uiError: no; filterMinCF: 0.0001; filterBeta: 0.005; missTolerance: 8; warmupTolerance: 3"
+  mindar-image="imageTargetSrc: ./targets-indigo.mind?v=5; autoStart: false; uiScanning: no; uiLoading: no; uiError: no; filterMinCF: 0.0001; filterBeta: 0.005; missTolerance: 8; warmupTolerance: 3"
   embedded
   color-space="sRGB"
   renderer="colorManagement: true, physicallyCorrectLights"
@@ -109,7 +206,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:var(--encre);
   <!-- cible : 738 x 1600 -> largeur 1, hauteur 2.168 -->
   <a-entity id="target" mindar-image-target="targetIndex: 0">
     <a-entity id="marks"></a-entity>
-    <a-plane id="cartel" width="0.88" height="0.30" position="0 0.80 0.001"
+    <a-plane id="cartel" width="0.88" height="0.44" position="0 0.70 0.001"
              material="transparent: true; shader: flat" visible="false"></a-plane>
     <a-video id="screen" src="#clip" width="1" height="2.168" position="0 0 0.002" visible="false"></a-video>
   </a-entity>
@@ -119,108 +216,129 @@ html,body{margin:0;height:100%;overflow:hidden;background:var(--encre);
 <script>
 (function(){
   var YT   = "https://youtu.be/Pc2-ln6rSJs";
-  var MIND = "./targets-indigo.mind?v=4";
+  var MIND = "./targets-indigo.mind?v=5";
+  var MIND_SIZE = 889810;
 
-  // Le texte du cartel. Trois lignes, à changer ici et nulle part ailleurs.
+  // Cartel AR : court et gros. Le détail vit dans la fiche, pas sur un plan qui bouge.
   var CARTEL = {
-    kicker: "BEAU PLAN · MAQUETTE",
+    kicker: "BEAU PLAN · PAMPLEMOUSSES",
     titre:  "INDIGO",
-    these:  "Résidentiel · district nord"
+    phase:  "PHASE 2",
+    nombre: "57",
+    unite:  "APPARTEMENTS"
   };
 
-  var W = 1, H = 2.168;              // dimensions de la cible en unités MindAR
-  var ARM = 0.17, THICK = 0.016;     // équerres : longueur de bras, épaisseur
+  var W = 1, H = 2.168;
+  var ARM = 0.17, THICK = 0.016;
 
-  var scene  = document.querySelector('a-scene');
-  var target = document.querySelector('#target');
-  var marks  = document.querySelector('#marks');
-  var cartel = document.querySelector('#cartel');
-  var screenEl = document.querySelector('#screen');
-  var video  = document.querySelector('#clip');
-  var gate   = document.querySelector('#gate');
-  var hud    = document.querySelector('#hud');
-  var status = document.querySelector('#status');
-  var diag   = document.querySelector('#diag');
-  var soundBtn = document.querySelector('#sound');
-  var linkBtn  = document.querySelector('#link');
-  var fatal    = document.querySelector('#fatal');
-  var fatalMsg = document.querySelector('#fatalmsg');
+  var $ = function(s){ return document.querySelector(s); };
+  var scene = $('a-scene'), target = $('#target'), marks = $('#marks');
+  var cartel = $('#cartel'), screenEl = $('#screen'), video = $('#clip');
+  var gate = $('#gate'), hud = $('#hud'), status = $('#status'), diag = $('#diag');
+  var turn = $('#turn'), infoBtn = $('#infoBtn'), videoBtn = $('#videoBtn'), soundBtn = $('#soundBtn');
+  var sheet = $('#sheet'), closeBtn = $('#close');
+  var fatal = $('#fatal'), fatalMsg = $('#fatalmsg');
 
-  var hasVideo = true;
+  var hasVideo = true, locked = false, lastFocus = null;
   var calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var portrait = window.matchMedia('(orientation: portrait)');
 
   function say(t, found){ status.textContent = t; status.classList.toggle('found', !!found); }
   function die(m){ fatalMsg.textContent = m; fatal.classList.add('on'); }
 
-  /* ---------- équerres de verrouillage aux quatre coins ---------- */
-  function buildMarks(){
+  /* ---------- équerres aux quatre coins ---------- */
+  (function buildMarks(){
     var hx = W / 2, hy = H / 2;
     [[-1,1],[1,1],[-1,-1],[1,-1]].forEach(function(c){
       var sx = c[0], sy = c[1];
-      // bras horizontal
       var a = document.createElement('a-plane');
       a.setAttribute('width', ARM); a.setAttribute('height', THICK);
-      a.setAttribute('color', '#E4472B');
-      a.setAttribute('material', 'shader: flat');
+      a.setAttribute('color', '#E4472B'); a.setAttribute('material', 'shader: flat');
       a.setAttribute('position', (sx * (hx - ARM / 2)) + ' ' + (sy * hy) + ' 0.003');
       marks.appendChild(a);
-      // bras vertical
       var b = document.createElement('a-plane');
       b.setAttribute('width', THICK); b.setAttribute('height', ARM);
-      b.setAttribute('color', '#E4472B');
-      b.setAttribute('material', 'shader: flat');
+      b.setAttribute('color', '#E4472B'); b.setAttribute('material', 'shader: flat');
       b.setAttribute('position', (sx * hx) + ' ' + (sy * (hy - ARM / 2)) + ' 0.003');
       marks.appendChild(b);
     });
-  }
-  buildMarks();
+  })();
 
-  /* ---------- cartel dessiné au canvas, avec les vraies polices ---------- */
+  /* ---------- cartel dessiné au canvas, vraies polices ---------- */
   function drawCartel(){
-    var s = 4, w = 440 * s, h = 150 * s;   // 0.88 x 0.30 -> ratio conservé
+    var s = 4, w = 440 * s, h = 220 * s;
     var cv = document.createElement('canvas');
     cv.width = w; cv.height = h;
     var x = cv.getContext('2d');
 
     x.fillStyle = '#10151F'; x.fillRect(0, 0, w, h);
-    x.fillStyle = '#E4472B'; x.fillRect(0, 0, w, 7 * s);          // filet haut
-    x.fillStyle = '#F5B700'; x.fillRect(0, h - 3 * s, w, 3 * s);  // filet bas
+    x.fillStyle = '#E4472B'; x.fillRect(0, 0, w, 7 * s);
+    x.fillStyle = '#F5B700'; x.fillRect(0, h - 4 * s, w, 4 * s);
 
-    x.textBaseline = 'alphabetic';
     x.fillStyle = '#E4472B';
     x.font = (13 * s) + "px 'Space Mono', monospace";
-    var k = CARTEL.kicker.split('').join('\u2009\u2009');
-    x.fillText(k, 22 * s, 40 * s);
+    x.fillText(CARTEL.kicker.split('').join('\u2009'), 22 * s, 40 * s);
 
     x.fillStyle = '#F6F4EF';
-    x.font = (56 * s) + "px Anton, sans-serif";
-    x.fillText(CARTEL.titre.toUpperCase(), 20 * s, 96 * s);
+    x.font = (62 * s) + "px Anton, sans-serif";
+    x.fillText(CARTEL.titre, 20 * s, 104 * s);
+
+    x.fillStyle = '#E4472B';
+    x.font = 'bold ' + (15 * s) + "px 'Space Mono', monospace";
+    x.fillText(CARTEL.phase, 22 * s, 132 * s);
+
+    x.strokeStyle = 'rgba(246,244,239,.22)'; x.lineWidth = 2 * s;
+    x.beginPath(); x.moveTo(22 * s, 152 * s); x.lineTo(w - 22 * s, 152 * s); x.stroke();
+
+    x.fillStyle = '#F6F4EF';
+    x.font = (50 * s) + "px Anton, sans-serif";
+    x.fillText(CARTEL.nombre, 22 * s, 200 * s);
+    var nw = x.measureText(CARTEL.nombre).width;
 
     x.fillStyle = '#9C9890';
     x.font = (14 * s) + "px 'Space Mono', monospace";
-    x.fillText(CARTEL.these, 22 * s, 124 * s);
+    x.fillText(CARTEL.unite, 22 * s + nw + 14 * s, 194 * s);
 
     cartel.setAttribute('material', {
       src: cv.toDataURL('image/png'), transparent: true, shader: 'flat'
     });
   }
-  if (document.fonts && document.fonts.ready) {
-    document.fonts.ready.then(drawCartel);
-  } else {
-    window.addEventListener('load', drawCartel);
-  }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(drawCartel);
+  else window.addEventListener('load', drawCartel);
 
-  /* ---------- apparition ---------- */
-  function reveal(){
-    cartel.setAttribute('visible', 'true');
-    if (calm) return;
-    cartel.setAttribute('scale', '0.9 0.9 1');
-    cartel.setAttribute('animation__in',
-      'property: scale; to: 1 1 1; dur: 220; easing: easeOutCubic');
-    marks.setAttribute('scale', '1.06 1.06 1');
-    marks.setAttribute('animation__in',
-      'property: scale; to: 1 1 1; dur: 260; easing: easeOutCubic');
+  /* ---------- invite de rotation : après verrouillage seulement ---------- */
+  function syncTurn(){
+    // En portrait la cible verticale se cadre mieux. On ne suggère de tourner
+    // qu'une fois la maquette verrouillée, quand la vidéo devient l'objet principal.
+    turn.classList.toggle('on', locked && portrait.matches && !sheet.classList.contains('on'));
   }
+  if (portrait.addEventListener) portrait.addEventListener('change', syncTurn);
+  else if (portrait.addListener) portrait.addListener(syncTurn);
+  window.addEventListener('orientationchange', function(){ setTimeout(syncTurn, 250); });
+
+  /* ---------- fiche ---------- */
+  function openSheet(){
+    lastFocus = document.activeElement;
+    sheet.classList.add('on'); sheet.focus(); syncTurn();
+    if (hasVideo) video.pause();
+  }
+  function closeSheet(){
+    sheet.classList.remove('on'); syncTurn();
+    if (lastFocus) lastFocus.focus();
+    if (hasVideo && locked) video.play();
+  }
+  infoBtn.addEventListener('click', openSheet);
+  closeBtn.addEventListener('click', closeSheet);
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && sheet.classList.contains('on')) closeSheet();
+  });
+
+  videoBtn.addEventListener('click', function(){
+    window.open(YT, '_blank', 'noopener');
+  });
+  soundBtn.addEventListener('click', function(){
+    video.muted = false; video.play(); soundBtn.classList.remove('on');
+  });
 
   video.addEventListener('error', function(){ hasVideo = false; });
 
@@ -234,35 +352,37 @@ html,body{margin:0;height:100%;overflow:hidden;background:var(--encre);
   });
 
   target.addEventListener('targetFound', function(){
-    say('Indigo reconnu', true);
-    reveal();
-    if (hasVideo) {
+    locked = true;
+    say('Indigo · 57 appartements', true);
+    cartel.setAttribute('visible', 'true');
+    infoBtn.classList.add('on');
+    videoBtn.classList.add('on');
+    if (!calm) {
+      cartel.setAttribute('scale', '0.92 0.92 1');
+      cartel.setAttribute('animation__in', 'property: scale; to: 1 1 1; dur: 220; easing: easeOutCubic');
+    }
+    if (hasVideo && !sheet.classList.contains('on')) {
       screenEl.setAttribute('visible', 'true');
       var p = video.play();
       if (p && p.catch) p.catch(function(){
         video.muted = true; video.play(); soundBtn.classList.add('on');
       });
-    } else {
-      linkBtn.classList.add('on');
     }
+    syncTurn();
   });
 
   target.addEventListener('targetLost', function(){
+    locked = false;
     say('Cadrez la maquette');
     cartel.setAttribute('visible', 'false');
     screenEl.setAttribute('visible', 'false');
-    linkBtn.classList.remove('on');
+    infoBtn.classList.remove('on');
+    videoBtn.classList.remove('on');
     if (hasVideo) video.pause();
+    syncTurn();
   });
 
-  soundBtn.addEventListener('click', function(){
-    video.muted = false; video.play(); soundBtn.classList.remove('on');
-  });
-  linkBtn.addEventListener('click', function(){
-    window.open(YT, '_blank', 'noopener');
-  });
-
-  document.querySelector('#start').addEventListener('click', function(){
+  $('#start').addEventListener('click', function(){
     if (hasVideo) {
       var p = video.play();
       if (p && p.then) p.then(function(){
@@ -277,7 +397,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:var(--encre);
       .then(function(r){ return r.ok ? r.arrayBuffer() : Promise.reject('HTTP ' + r.status); })
       .then(function(b){
         diag.textContent = 'cible ' + b.byteLength + ' o'
-          + (b.byteLength === 889810 ? ' · indigo ok' : ' · fichier inattendu');
+          + (b.byteLength === MIND_SIZE ? ' · indigo ok' : ' · fichier inattendu');
       })
       .catch(function(e){ diag.textContent = 'cible introuvable · ' + e; });
 
