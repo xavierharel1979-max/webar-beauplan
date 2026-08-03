@@ -1,1 +1,70 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Test perso — Pokémon AR</title>
+<script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+<style>
+body{margin:0;background:#10151F;font-family:'Space Mono',monospace}
+#hint{position:fixed;z-index:10;top:12px;left:50%;transform:translateX(-50%);
+  color:#F6F4EF;background:rgba(16,21,31,.8);padding:8px 12px;
+  font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+</style>
+</head>
+<body>
+<div id="hint">Cadrez la carte</div>
 
+<!-- IMPORTANT :
+     1) Compilez votre image de carte sur https://hiukim.github.io/mind-ar-js-doc/tools/compile/
+        et posez le fichier obtenu ici sous le nom  targets.mind
+     2) Les modèles Pokemon-3D-api sont compressés Draco : le décodeur est
+        déclaré sur la scène, sans lui le modèle ne s'affiche jamais. -->
+
+<a-scene
+  mindar-image="imageTargetSrc: ./targets.mind; maxTrack: 1; uiScanning: no;"
+  gltf-model="dracoDecoderPath: https://www.gstatic.com/draco/versioned/decoders/1.5.7/"
+  color-space="sRGB"
+  renderer="colorManagement: true, physicallyCorrectLights"
+  vr-mode-ui="enabled: false"
+  device-orientation-permission-ui="enabled: false">
+
+  <a-assets>
+    <!-- Pikachu direct depuis le dépôt Pokemon-3D-api (146 Ko, vérifié).
+         Changez le numéro pour un autre Pokémon : 6 = Dracaufeu, 1 = Bulbizarre... -->
+    <a-asset-item id="poke"
+      src="https://raw.githubusercontent.com/Pokemon-3D-api/assets/main/models/opt/regular/25.glb">
+    </a-asset-item>
+  </a-assets>
+
+  <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+
+  <!-- cible 0 : la carte générée -->
+  <a-entity mindar-image-target="targetIndex: 0">
+    <a-gltf-model src="#poke" position="0 0 0.05" rotation="90 0 0" scale="0.3 0.3 0.3"
+      animation="property: rotation; to: 90 360 0; dur: 8000; loop: true; easing: linear">
+    </a-gltf-model>
+  </a-entity>
+  <!-- cible 1 : l'image Pikachu 2D -->
+  <a-entity mindar-image-target="targetIndex: 1">
+    <a-gltf-model src="#poke" position="0 0 0.05" rotation="90 0 0" scale="0.35 0.35 0.35"
+      animation="property: rotation; to: 90 360 0; dur: 8000; loop: true; easing: linear">
+    </a-gltf-model>
+  </a-entity>
+</a-scene>
+
+<script>
+document.querySelector('a-scene').addEventListener('arReady', function(){
+  document.querySelector('#hint').textContent = 'Cadrez la carte';
+});
+var t = document.querySelector('[mindar-image-target]');
+t.addEventListener('targetFound', function(){
+  document.querySelector('#hint').textContent = 'Attrapé';
+});
+t.addEventListener('targetLost', function(){
+  document.querySelector('#hint').textContent = 'Cadrez la carte';
+});
+</script>
+</body>
+</html>
